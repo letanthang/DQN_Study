@@ -4,7 +4,6 @@ import cv2 as cv
 import matplotlib.pyplot as plt
 import pickle
 from matplotlib import style
-import time
 from qlearning_env_train import Blob
 
 style.use('ggplot')
@@ -43,7 +42,7 @@ for episode in range(EPISODES):
 	food = Blob()
 	enemy = Blob()
 
-	if episode % SHOW_EVERY == 0:
+	if episode % SHOW_EVERY:
 		print(f'on episode # {episode}')
 		print(f'{SHOW_EVERY} ep mean: {np.mean(episode_rewards[-SHOW_EVERY:])}')
 		render = True
@@ -56,6 +55,9 @@ for episode in range(EPISODES):
 		obs = (player-food, player-enemy)
 		action = np.argmax(q_table[obs])		
 		player.action(action)
+		enemy.move()
+		food.move()
+
 		if player.x == enemy.x and player.y == enemy.y:
 			reward = -ENEMY_PENALTY
 		elif player.x == food.x and player.y == food.y:
@@ -68,9 +70,7 @@ for episode in range(EPISODES):
 			env[food.x][food.y] = COLORS[FOOD_N]
 			env[player.x][player.y] = COLORS[PLAYER_N]
 			env[enemy.x][enemy.y] = COLORS[ENEMY_N]
-
 			img = Image.fromarray(env, 'RGB')
-			# img = img.resize((300,300))
 			cv.namedWindow("MyEnv", cv.WINDOW_NORMAL) 
 			cv.imshow('MyEnv', np.array(img))
 			if reward == FOOD_REWARD or reward == -ENEMY_PENALTY:
