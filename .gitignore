@@ -12,3 +12,5 @@ MyEnv/qtable-1651474074.pickle
 *.pickle
 MyEnv/qtable-1651474074.pickle
 MyEnv/qtable-1651474074.pickle
+.idea
+**.DS_Store
